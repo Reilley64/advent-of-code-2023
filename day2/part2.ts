@@ -1,9 +1,6 @@
-import fs from "fs";
-import path from "path";
+const input = Bun.file(import.meta.dir + "/input.txt.txt");
 
-const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
-
-const sum = input.split("\n").reduce((acc: number, line: string) => {
+const sum = (await input.text()).split("\n").reduce((acc: number, line: string) => {
   const [, data] = line.split(":");
 
   const cubeMap = new Map([
@@ -27,5 +24,3 @@ const sum = input.split("\n").reduce((acc: number, line: string) => {
 }, 0);
 
 console.log(sum);
-
-export {};

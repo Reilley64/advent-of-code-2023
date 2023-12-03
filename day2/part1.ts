@@ -1,7 +1,4 @@
-import fs from "fs";
-import path from "path";
-
-const input = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const input = Bun.file(import.meta.dir + "/input.txt.txt");
 
 const cubeMap = new Map([
   ["red", 12],
@@ -9,7 +6,7 @@ const cubeMap = new Map([
   ["blue", 14],
 ]);
 
-const sum = input.split("\n").reduce((acc: number, line: string) => {
+const sum = (await input.text()).split("\n").reduce((acc: number, line: string) => {
   const [identifier, data] = line.split(":");
 
   const id = parseInt(identifier.slice(5, identifier.length));
@@ -32,5 +29,3 @@ const sum = input.split("\n").reduce((acc: number, line: string) => {
 }, 0);
 
 console.log(sum);
-
-export {};

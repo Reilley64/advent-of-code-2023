@@ -1,7 +1,4 @@
-const fs = require("fs");
-const path = require("path");
-
-const calibrationDocument = fs.readFileSync(path.join(__dirname, "input.txt"), "utf8");
+const input = Bun.file(import.meta.dir + "/input.txt.txt");
 
 const numberMap = new Map([
   ["one", "1"],
@@ -17,7 +14,7 @@ const numberMap = new Map([
 
 const regex = /one|two|three|four|five|six|seven|eight|nine/g;
 
-const sum = calibrationDocument.split("\n").reduce((acc: number, line: string) => {
+const sum = (await input.text()).split("\n").reduce((acc: number, line: string) => {
   function findNumber(str: string, reverse: boolean) {
     let result = null;
     let word = "";
@@ -48,5 +45,3 @@ const sum = calibrationDocument.split("\n").reduce((acc: number, line: string) =
 }, 0);
 
 console.log("sum:", sum);
-
-export {};
