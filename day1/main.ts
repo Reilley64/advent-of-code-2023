@@ -48,3 +48,5 @@ const sum = calibrationDocument.split("\n").reduce((acc: number, line: string) =
 }, 0);
 
 console.log("sum:", sum);
+
+export {};
