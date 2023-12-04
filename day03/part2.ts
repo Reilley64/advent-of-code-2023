@@ -23,11 +23,11 @@ while ((starMatch = starRegex.exec(testInput)) !== null) {
   above.split("").forEach((char, index) => {
     if (isNaN(parseInt(above[index]))) {
       if (index < 3) {
-        Array.from({ length: index + 1 }).forEach((value, charIndex) => {
+        Array.from({ length: index + 1 }).forEach((_, charIndex) => {
           above = above.substring(0, charIndex) +  "." + above.substring(charIndex + 1);
         });
       } else if (index > 3) {
-        Array.from({ length: above.length - index }).forEach((value, charIndex) => {
+        Array.from({ length: above.length - index }).forEach((_, charIndex) => {
           above = above.substring(0, (above.length - 1) - charIndex) +  "." + above.substring((above.length - 1) - charIndex + 1);
         });
       }
