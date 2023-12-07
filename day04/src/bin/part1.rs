@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 fn main() {
     let input = include_str!("./input.txt");
     let output = process(input);
@@ -16,22 +18,23 @@ fn process(input: &str) -> i32 {
         let winning_numbers_string = parts.next().unwrap();
         let numbers_string = parts.next().unwrap();
 
-        let winning_numbers: Vec<&str> = winning_numbers_string.split_whitespace().collect();
-        let numbers: Vec<&str> = numbers_string.split_whitespace().collect();
+        let winning_numbers: HashSet<i32> = winning_numbers_string
+            .split_whitespace()
+            .map(|x| x.parse().unwrap())
+            .collect();
+        let numbers: HashSet<i32> = numbers_string
+            .split_whitespace()
+            .map(|x| x.parse().unwrap())
+            .collect();
 
-        let mut points = 0;
+        let winning: Vec<i32> = winning_numbers
+            .intersection(&numbers)
+            .copied()
+            .collect();
 
-        for number in numbers {
-            if winning_numbers.contains(&number) {
-                if points == 0 {
-                    points = 1;
-                } else {
-                    points *= 2;
-                }
-            }
+        if winning.len() > 0 {
+            sum += u32::pow(2, (winning.len() as u32) - 1) as i32;
         }
-
-        sum += points;
     }
 
     sum
