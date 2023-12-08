@@ -32,8 +32,6 @@ fn process(input: &str) -> i64 {
             }
         }
 
-        println!("{}", beat);
-
         sum *= beat;
     }
 
