@@ -1,7 +1,0 @@
-{
-  "name": "advent-of-code-2023",
-  "version": "1.0.0",
-  "devDependencies": {
-    "bun-types": "^1.0.15"
-  }
-}

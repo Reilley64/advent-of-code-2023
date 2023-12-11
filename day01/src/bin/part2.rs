@@ -8,67 +8,59 @@ fn main() {
 }
 
 fn process(input: &str) -> i32 {
-    let pattern = Regex::new(r#"(one|two|three|four|five|six|seven|eight|nine)"#).unwrap();
+    fn find_numbers(s: &str) -> (String, String) {
+        let number_map = HashMap::from([
+            ("one", "1"),
+            ("two", "2"),
+            ("three", "3"),
+            ("four", "4"),
+            ("five", "5"),
+            ("six", "6"),
+            ("seven", "7"),
+            ("eight", "8"),
+            ("nine", "9"),
+        ]);
 
-    let number_map = HashMap::from([
-        ("one", "1"),
-        ("two", "2"),
-        ("three", "3"),
-        ("four", "4"),
-        ("five", "5"),
-        ("six", "6"),
-        ("seven", "7"),
-        ("eight", "8"),
-        ("nine", "9"),
-    ]);
+        let pattern = Regex::new(&format!("({})", number_map.keys().map(|&s| s).collect::<Vec<_>>().join("|"))).unwrap();
 
-    let find_number = |s: &str, reverse: bool| -> Option<String> {
-        let mut result: Option<String> = None;
-        let mut word = String::new();
+        let mut first: Option<String> = None;
+        let mut last: Option<String> = None;
 
-        let chars: Vec<char> = if reverse {
-            s.chars().rev().collect()
-        } else {
-            s.chars().collect()
+        let mut set_match = |matched: String| {
+            if first.is_none() {
+                first = Some(matched.clone());
+                last = Some(matched.clone());
+            } else {
+                last = Some(matched.clone());
+            }
         };
 
+        let chars: Vec<char> = s.chars().collect();
+
+        let mut word = String::new();
         for c in chars.iter() {
             if c.is_numeric() {
-                result = Some(c.to_string());
+                word.clear();
+                set_match(c.to_string());
             } else {
-                word = if reverse {
-                    format!("{}{}", c, word)
-                } else {
-                    format!("{}{}", word, c)
-                };
+                word.push(*c);
 
                 for mat in pattern.find_iter(&word) {
                     if let Some(matched) = number_map.get(&mat.as_str()) {
-                        result = Some(matched.to_string());
+                        set_match(matched.to_string());
                     }
                 }
             }
-
-            if result.is_some() {
-                break;
-            }
         }
 
-        result
-    };
+        (first.unwrap(), last.unwrap())
+    }
 
     let mut sum = 0;
 
     for line in input.lines() {
-        let first = find_number(line, false);
-        let last = find_number(line, true);
-
-        if first.is_some() && last.is_some() {
-            let first = first.unwrap();
-            let last = last.unwrap();
-            println!("{} {} {}", line, first, last);
-            sum += format!("{}{}", first, last).parse::<i32>().unwrap();
-        }
+        let (first, last) = find_numbers(line);
+        sum += format!("{}{}", first, last).parse::<i32>().unwrap();
     }
 
     sum
@@ -79,8 +71,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test() {
-        let input = include_str!("./test.txt");
+    fn test2() {
+        let input = include_str!("test2.txt");
         let output = process(input);
         assert_eq!(output, 281);
     }
